@@ -1,4 +1,4 @@
-package github.hmasum18.architecture.model;
+package github.hmasum18.architecture.service.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

@@ -1,4 +1,4 @@
-package github.hmasum18.architecture.Views.Adapters;
+package github.hmasum18.architecture.view.Adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,38 +6,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.architectureexamle_1.R;
-import github.hmasum18.architecture.model.Note;
+import github.hmasum18.architecture.R;
+import github.hmasum18.architecture.service.model.Note;
 
-//this adapter will hold or show a list of note and we get the note by this.getItem(int pos)
-//and setItems by adapter.submitItems(List<T> list)
-//and it will show animation while inserting and deleting items from the recyclerView
-public class NoteListAdapter extends ListAdapter<Note, NoteListAdapter.NoteHolder> {
+import java.util.ArrayList;
+import java.util.List;
+
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
+
+    private List<Note> notes = new ArrayList<>();
     private OnNoteItemClickListener onNoteItemClickListener;
-
-    ///this is where we define if a data is changed or not
-    //and we will have a nice animation
-    private static final  DiffUtil.ItemCallback<Note> DIFF_CALLBACK = new DiffUtil.ItemCallback<Note>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull Note oldItem, @NonNull Note newItem) {
-            return oldItem.getId() == newItem.getId();
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull Note oldItem, @NonNull Note newItem) {
-            return oldItem.getTitle().equals(newItem.getTitle())
-                    && oldItem.getDescription().equals(newItem.getDescription())
-                    && oldItem.getPriority() == newItem.getPriority() ;
-        }
-    };
-
-    public NoteListAdapter() {
-        super(DIFF_CALLBACK);
-    }
 
     @NonNull
     @Override
@@ -49,7 +29,7 @@ public class NoteListAdapter extends ListAdapter<Note, NoteListAdapter.NoteHolde
 
     @Override
     public void onBindViewHolder(@NonNull NoteHolder holder, int position) {
-        Note currentNote = this.getItem(position); //get note item from the list adapter
+        Note currentNote = notes.get(position);
 
         holder.noteTitle.setText(currentNote.getTitle());
         holder.noteDescription.setText(currentNote.getDescription());
@@ -57,9 +37,19 @@ public class NoteListAdapter extends ListAdapter<Note, NoteListAdapter.NoteHolde
 
     }
 
+    @Override
+    public int getItemCount() {
+        return notes.size();
+    }
+
+    public void setNotes( List<Note> notes) {
+        this.notes = notes;
+        notifyDataSetChanged();
+    }
+
     public void getNote(int position)
     {
-        this.getItem(position);
+        notes.get(position);
     }
 
     class NoteHolder extends RecyclerView.ViewHolder{
@@ -81,7 +71,7 @@ public class NoteListAdapter extends ListAdapter<Note, NoteListAdapter.NoteHolde
                 //we call the member function of the instance that we created in ListItem fragment
                 //if we didn't created any instance and position is -1 or invalid(in case we deleted the item but it is still not completed)
                 if(onNoteItemClickListener != null && position !=RecyclerView.NO_POSITION)
-                    onNoteItemClickListener.onNoteItemClick( getItem(position) ); //pass the note in that position to our fragment
+                    onNoteItemClickListener.onNoteItemClick( notes.get(position) ); //pass the note in that position to our fragment
             });
         }
     }

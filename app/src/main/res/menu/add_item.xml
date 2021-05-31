@@ -4,16 +4,9 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/menu_one_delete_all_item"
-            android:title="delete all"
-            android:icon="@drawable/ic_baseline_delete_24"
-            app:showAsAction="ifRoom"
-            />
-        <item
-            android:id="@+id/menu_one_refresh"
             android:title="Reset"
             android:icon="@drawable/ic_baseline_refresh_24"
-            app:showAsAction="ifRoom"
+             app:showAsAction="ifRoom"
             />
     </group>
-
 </menu>

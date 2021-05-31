@@ -1,25 +1,24 @@
-package github.hmasum18.architecture.ViewModels;
+package github.hmasum18.architecture.viewModel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import github.hmasum18.architecture.Repository.NoteRepoWithThreadPool;
-import github.hmasum18.architecture.model.Note;
+import github.hmasum18.architecture.service.repository.NoteRepoWithThreadPool;
+import github.hmasum18.architecture.service.model.Note;
 
 import java.util.List;
 
-public class TestViewModel extends AndroidViewModel {
-    private NoteRepoWithThreadPool noteRepoWithThreadPool;
+public class NoteViewModel extends AndroidViewModel {
+    public static final String TAG = "NoteViewModel->";
+    private final NoteRepoWithThreadPool noteRepoWithThreadPool;
 
-    private LiveData<List<Note>> allNotes;
-
-    public TestViewModel(@NonNull Application application) {
+    public NoteViewModel(@NonNull Application application) {
         super(application);
         noteRepoWithThreadPool = new NoteRepoWithThreadPool(application);
-        allNotes = noteRepoWithThreadPool.getAllNotes();
     }
 
     public void insert(Note note) {
@@ -40,6 +39,12 @@ public class TestViewModel extends AndroidViewModel {
 
     //Live data is observed in background thread
     public LiveData<List<Note>> getAllNotes() {
-        return allNotes; //we don't have to create asyn task for this as room automatically do observe live data background thread
+        return noteRepoWithThreadPool.getAllNotes(); //we don't have to create asyn task for this as room automatically do observe live data background thread
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        Log.d(TAG, "onCleared: ");
     }
 }

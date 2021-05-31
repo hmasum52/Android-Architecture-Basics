@@ -1,4 +1,4 @@
-package github.hmasum18.architecture.RoomDataBase.Doas;
+package github.hmasum18.architecture.service.room.Doas;
 
 // Doa = data access object
 
@@ -9,7 +9,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import github.hmasum18.architecture.model.Note;
+import github.hmasum18.architecture.service.model.Note;
 
 import java.util.List;
 

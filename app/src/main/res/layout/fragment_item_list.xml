@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="github.hmasum18.architecture.Views.Fragments.ItemListFragment">
+    tools:context="github.hmasum18.architecture.view.Fragments.ItemListFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView

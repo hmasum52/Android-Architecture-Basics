@@ -6,7 +6,7 @@
     app:startDestination="@id/itemListFragment">
     <fragment
         android:id="@+id/itemListFragment"
-        android:name="github.hmasum18.architecture.Views.Fragments.ItemListFragment"
+        android:name="github.hmasum18.architecture.view.Fragments.ItemListFragment"
         android:label="fragment_item_list"
         tools:layout="@layout/fragment_item_list" >
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
-        android:name="github.hmasum18.architecture.Views.Fragments.AddItemFragment"
+        android:name="github.hmasum18.architecture.view.Fragments.AddItemFragment"
         android:label="fragment_add_item"
         tools:layout="@layout/fragment_add_item" />
 </navigation>

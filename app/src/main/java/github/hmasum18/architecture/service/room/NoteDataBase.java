@@ -1,4 +1,4 @@
-package github.hmasum18.architecture.RoomDataBase;
+package github.hmasum18.architecture.service.room;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -11,8 +11,8 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 
-import github.hmasum18.architecture.RoomDataBase.Doas.NoteDao;
-import github.hmasum18.architecture.model.Note;
+import github.hmasum18.architecture.service.room.Doas.NoteDao;
+import github.hmasum18.architecture.service.model.Note;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

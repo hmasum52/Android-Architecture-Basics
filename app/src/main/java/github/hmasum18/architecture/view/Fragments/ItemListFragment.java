@@ -1,4 +1,4 @@
-package github.hmasum18.architecture.Views.Fragments;
+package github.hmasum18.architecture.view.Fragments;
 
 import android.os.Bundle;
 
@@ -17,39 +17,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import github.hmasum18.architecture.ViewModels.NoteViewModel;
-import com.example.architectureexamle_1.R;
-import github.hmasum18.architecture.ViewModels.TestViewModel;
-import github.hmasum18.architecture.model.Note;
-import github.hmasum18.architecture.Views.Adapters.NoteListAdapter;
+import github.hmasum18.architecture.R;
+import github.hmasum18.architecture.viewModel.NoteViewModel;
+import github.hmasum18.architecture.service.model.Note;
+import github.hmasum18.architecture.view.Adapters.NoteListAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ItemListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ItemListFragment extends Fragment {
 
     public static final String TAG = "ItemListFragment->";
     private RecyclerView  recyclerView;
     private NoteViewModel noteViewModel;
-    private TestViewModel testViewModel;
     private FloatingActionButton addFab;
   //  private NoteAdapter noteAdapter;
     private NoteListAdapter noteListAdapter;
     private List<Note> allNotes;
 
-    public ItemListFragment() {
-        // Required empty public constructor
-    }
-
-    public static ItemListFragment newInstance(String param1, String param2) {
-        ItemListFragment fragment = new ItemListFragment();
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,8 +47,6 @@ public class ItemListFragment extends Fragment {
 
         //add adapters and listeners
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        /*noteAdapter = new NoteAdapter();
-        recyclerView.setAdapter(noteAdapter);*/
         noteListAdapter = new NoteListAdapter();
         recyclerView.setAdapter(noteListAdapter);
 
@@ -81,35 +64,11 @@ public class ItemListFragment extends Fragment {
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
                 .get(NoteViewModel.class);
 
-        testViewModel = new ViewModelProvider(requireActivity(),
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
-                .get(TestViewModel.class);
-
-        testViewModel.getAllNotes().observe(requireActivity(),notes ->{
+        noteViewModel.getAllNotes().observe(getViewLifecycleOwner(), notes ->{
             noteListAdapter.submitList(notes);
             allNotes = notes;
             Log.d(TAG," notes received from testViewModel");
         });
-
-       /* noteViewModel.getAllNotes().observe(requireActivity(), new Observer<List<Note>>() {
-            @Override
-            public void onChanged(List<Note> notes) {
-                if(notes == null)
-                {
-                    Toast.makeText(getActivity().getApplicationContext(),"note list is null",Toast.LENGTH_SHORT).show();
-                }
-                else  if(notes.size() == 0)
-                {
-                    Toast.makeText(getActivity().getApplicationContext(),"note list is empty",Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(getActivity().getApplicationContext(),"note list size: "+notes.size(),Toast.LENGTH_SHORT).show();
-                }
-              //  noteAdapter.setNotes(notes);
-                noteListAdapter.submitList(notes);
-                allNotes = notes;
-            }
-        });*/
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -121,7 +80,7 @@ public class ItemListFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 //noteViewModel.delete( allNotes.get(viewHolder.getAdapterPosition()) );
-                testViewModel.delete(allNotes.get(viewHolder.getAdapterPosition()));
+                noteViewModel.delete(allNotes.get(viewHolder.getAdapterPosition()));
                 Toast.makeText(getActivity().getApplicationContext(),"Note deleted successfully",Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(recyclerView); //attach to our recyclerView

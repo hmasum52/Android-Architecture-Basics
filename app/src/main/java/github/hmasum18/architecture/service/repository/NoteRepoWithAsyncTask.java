@@ -1,13 +1,13 @@
-package github.hmasum18.architecture.Repository;
+package github.hmasum18.architecture.service.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import github.hmasum18.architecture.RoomDataBase.Doas.NoteDao;
-import github.hmasum18.architecture.model.Note;
-import github.hmasum18.architecture.RoomDataBase.NoteDataBase;
+import github.hmasum18.architecture.service.room.Doas.NoteDao;
+import github.hmasum18.architecture.service.model.Note;
+import github.hmasum18.architecture.service.room.NoteDataBase;
 
 import java.util.List;
 

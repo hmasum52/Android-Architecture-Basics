@@ -1,13 +1,13 @@
-package github.hmasum18.architecture.Repository;
+package github.hmasum18.architecture.service.repository;
 
 import android.app.Application;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
-import github.hmasum18.architecture.RoomDataBase.Doas.NoteDao;
-import github.hmasum18.architecture.RoomDataBase.NoteDataBase;
-import github.hmasum18.architecture.model.Note;
+import github.hmasum18.architecture.service.room.Doas.NoteDao;
+import github.hmasum18.architecture.service.room.NoteDataBase;
+import github.hmasum18.architecture.service.model.Note;
 
 import java.util.List;
 
@@ -20,7 +20,6 @@ public class NoteRepoWithThreadPool {
     public NoteRepoWithThreadPool(Application application) {
          noteDataBase = NoteDataBase.getInstance(application); // make the database or get existing
         noteDao = noteDataBase.noteDao(); // get the noteDao to access data from note_table of this database
-        allNotes = noteDao.getAllNotes(); //so now we get all the notes from the note_table with the help of noteDao
     }
 
     public void insert(Note note) {
@@ -65,6 +64,7 @@ public class NoteRepoWithThreadPool {
 
     //Live data is observed in background thread
     public LiveData<List<Note>> getAllNotes() {
+        allNotes = noteDao.getAllNotes(); //so now we get all the notes from the note_table with the help of noteDao
         Log.d(TAG,"getAllNotes: getting all notes");
         return allNotes; //we don't have to create asyn task for this as room automatically do observe live data background thread
     }

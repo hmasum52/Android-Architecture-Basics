@@ -1,4 +1,4 @@
-package github.hmasum18.architecture.Views.Fragments;
+package github.hmasum18.architecture.view.Fragments;
 
 import android.os.Bundle;
 
@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.transition.Explode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +18,16 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
-import github.hmasum18.architecture.ViewModels.NoteViewModel;
-import com.example.architectureexamle_1.R;
-import github.hmasum18.architecture.ViewModels.TestViewModel;
-import github.hmasum18.architecture.model.Note;
+import github.hmasum18.architecture.R;
+import github.hmasum18.architecture.viewModel.NoteViewModel;
+import github.hmasum18.architecture.service.model.Note;
 
 public class AddItemFragment extends Fragment {
+    public static final String TAG = "AddItemFragment->";
     private EditText note_title_edtxt, note_description_edtxt;
     private NumberPicker note_priority_numPkr;
     private Button save_btn;
     private NoteViewModel noteViewModel;
-    private TestViewModel testViewModel;
 
     private int note_id  = -1;
     private String note_title = "";
@@ -58,11 +58,6 @@ public class AddItemFragment extends Fragment {
         noteViewModel = new ViewModelProvider(requireActivity(),
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication())
         ).get(NoteViewModel.class);
-
-        testViewModel = new ViewModelProvider(requireActivity(),
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication())
-        ).get(TestViewModel.class);
-        
 
         // Inflate the layout for this fragment
         //and find the views
@@ -105,17 +100,28 @@ public class AddItemFragment extends Fragment {
         if(note_id == -1) //we are in add note mode
         {
            // noteViewModel.insert(new Note(title,description,priority));
-            testViewModel.insert(new Note(title,description,priority));
+            noteViewModel.insert(new Note(title,description,priority));
             Toast.makeText(getActivity().getApplicationContext(), "new note inserted successfully", Toast.LENGTH_SHORT).show();
 
         }else { //we are in edit note mode
             Note note = new Note(title,description,priority);
             note.setId(note_id);
            // noteViewModel.update(note);
-            testViewModel.update(note);
+            noteViewModel.update(note);
             Toast.makeText(getActivity().getApplicationContext(), "note updated successfully", Toast.LENGTH_SHORT).show();
         }
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(TAG, "onDetach: ");
+    }
 }
