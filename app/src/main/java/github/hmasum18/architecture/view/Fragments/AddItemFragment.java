@@ -1,5 +1,6 @@
 package github.hmasum18.architecture.view.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.transition.Explode;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,10 +21,12 @@ import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import github.hmasum18.architecture.R;
+import github.hmasum18.architecture.view.IFragment;
+import github.hmasum18.architecture.view.MainActivity;
 import github.hmasum18.architecture.viewModel.NoteViewModel;
 import github.hmasum18.architecture.service.model.Note;
 
-public class AddItemFragment extends Fragment {
+public class AddItemFragment extends Fragment implements IFragment {
     public static final String TAG = "AddItemFragment->";
     private EditText note_title_edtxt, note_description_edtxt;
     private NumberPicker note_priority_numPkr;
@@ -58,6 +62,8 @@ public class AddItemFragment extends Fragment {
         noteViewModel = new ViewModelProvider(requireActivity(),
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication())
         ).get(NoteViewModel.class);
+
+        noteViewModel.setCurrentFragment(this);
 
         // Inflate the layout for this fragment
         //and find the views
@@ -101,17 +107,18 @@ public class AddItemFragment extends Fragment {
         {
            // noteViewModel.insert(new Note(title,description,priority));
             noteViewModel.insert(new Note(title,description,priority));
-            Toast.makeText(getActivity().getApplicationContext(), "new note inserted successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "new note inserted successfully", Toast.LENGTH_SHORT).show();
 
         }else { //we are in edit note mode
             Note note = new Note(title,description,priority);
             note.setId(note_id);
            // noteViewModel.update(note);
             noteViewModel.update(note);
-            Toast.makeText(getActivity().getApplicationContext(), "note updated successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "note updated successfully", Toast.LENGTH_SHORT).show();
         }
 
     }
+
 
     @Override
     public void onDestroy() {
@@ -123,5 +130,13 @@ public class AddItemFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         Log.d(TAG, "onDetach: ");
+    }
+
+    @Override
+    public void onOptionsMenuItemSelected(@NonNull MenuItem item) {
+        note_title_edtxt.setText("");
+        note_description_edtxt.setText("");
+        note_priority_numPkr.setValue(1);
+        Toast.makeText(getContext(),item.getTitle()+" clicked", Toast.LENGTH_SHORT).show();
     }
 }

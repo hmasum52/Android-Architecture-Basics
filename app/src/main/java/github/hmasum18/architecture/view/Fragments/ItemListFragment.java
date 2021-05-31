@@ -1,5 +1,6 @@
 package github.hmasum18.architecture.view.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,11 +14,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import github.hmasum18.architecture.R;
+import github.hmasum18.architecture.view.IFragment;
+import github.hmasum18.architecture.view.MainActivity;
 import github.hmasum18.architecture.viewModel.NoteViewModel;
 import github.hmasum18.architecture.service.model.Note;
 import github.hmasum18.architecture.view.Adapters.NoteListAdapter;
@@ -25,13 +29,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-public class ItemListFragment extends Fragment {
-
+public class ItemListFragment extends Fragment implements IFragment {
     public static final String TAG = "ItemListFragment->";
     private RecyclerView  recyclerView;
     private NoteViewModel noteViewModel;
     private FloatingActionButton addFab;
-  //  private NoteAdapter noteAdapter;
     private NoteListAdapter noteListAdapter;
     private List<Note> allNotes;
 
@@ -63,6 +65,8 @@ public class ItemListFragment extends Fragment {
         noteViewModel = new ViewModelProvider(requireActivity(),
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
                 .get(NoteViewModel.class);
+
+        noteViewModel.setCurrentFragment(this);
 
         noteViewModel.getAllNotes().observe(getViewLifecycleOwner(), notes ->{
             noteListAdapter.submitList(notes);
@@ -104,7 +108,10 @@ public class ItemListFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onOptionsMenuItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_one_delete_all_item) {
+            noteViewModel.deleteAllNotes();
+            Toast.makeText(getContext(), "All notes deleted", Toast.LENGTH_SHORT).show();
+        }
     }
 }

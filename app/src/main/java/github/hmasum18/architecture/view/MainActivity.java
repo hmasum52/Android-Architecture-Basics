@@ -10,12 +10,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import github.hmasum18.architecture.R;
+import github.hmasum18.architecture.view.Fragments.ItemListFragment;
 import github.hmasum18.architecture.viewModel.NoteViewModel;
 
 public class MainActivity extends AppCompatActivity implements NavController.OnDestinationChangedListener {
@@ -24,16 +28,24 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
     private NoteViewModel noteViewModel;
     private NavController navController;
     private int currentFragmentId;
+    private Toolbar mToolbar;
+    private IFragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "onCreate: ");
 
         noteViewModel = new ViewModelProvider(this,
                 ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
                 .get(NoteViewModel.class);
 
+        //find and set toolbar as actionbar
+        mToolbar = super.findViewById(R.id.toolbar);
+        super.setSupportActionBar(mToolbar);
+
+        //find and add destination changed listener to nav controller.
         navController = Navigation.findNavController(this, R.id.nav_host_fragmnet);
         navController.addOnDestinationChangedListener(this);
     }
@@ -41,31 +53,20 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(TAG, "onCreateOptionsMenu: ");
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_one, menu);
+        if (currentFragmentId == R.id.itemListFragment) {
+            mToolbar.inflateMenu(R.menu.menu_one);
+        } else {
+            mToolbar.inflateMenu(R.menu.add_item);
+        }
         return true;
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        Log.d(TAG, "onPrepareOptionsMenu: ");
-        if (currentFragmentId == R.id.itemListFragment) {
-            menu.findItem(R.id.menu_one_delete_all_item).setVisible(true);
-            menu.findItem(R.id.menu_one_refresh).setVisible(false);
-        } else {
-            menu.findItem(R.id.menu_one_delete_all_item).setVisible(false);
-            menu.findItem(R.id.menu_one_refresh).setVisible(true);
-        }
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_one_delete_all_item) {
-            noteViewModel.deleteAllNotes();
-            Toast.makeText(getApplicationContext(), "All notes deleted", Toast.LENGTH_SHORT).show();
-            return true;
-        }
+        Log.d(TAG, "onOptionsItemSelected: UwU");
+       //Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragmnet);
+        //this.currentFragment = (IFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
+        noteViewModel.onOptionsItemSelected(item);
         return super.onOptionsItemSelected(item);
     }
 
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
     public void onDestinationChanged(@NonNull NavController controller,
                                      @NonNull NavDestination destination,
                                      @Nullable Bundle arguments) {
+        Log.d(TAG, "onDestinationChanged: current destination: "+navController.getCurrentDestination().getLabel());
         this.currentFragmentId = destination.getId();
         super.invalidateOptionsMenu();
     }
