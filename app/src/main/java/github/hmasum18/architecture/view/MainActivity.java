@@ -1,6 +1,7 @@
 package github.hmasum18.architecture.view;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import github.hmasum18.architecture.R;
 import github.hmasum18.architecture.view.Fragments.ItemListFragment;
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
     private NoteViewModel noteViewModel;
     private NavController navController;
     private int currentFragmentId;
+    private AppBarConfiguration appBarConfiguration;
     private Toolbar mToolbar;
     private IFragment currentFragment;
 
@@ -48,6 +52,13 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
         //find and add destination changed listener to nav controller.
         navController = Navigation.findNavController(this, R.id.nav_host_fragmnet);
         navController.addOnDestinationChangedListener(this);
+
+        //create app bar configuration
+        appBarConfiguration = new AppBarConfiguration
+                .Builder(R.id.itemListFragment).build();
+
+        NavigationUI.setupWithNavController(mToolbar,navController,appBarConfiguration);
+
     }
 
 
@@ -63,5 +74,15 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
                                      @Nullable Bundle arguments) {
         Log.d(TAG, "onDestinationChanged: current destination: "+navController.getCurrentDestination().getLabel());
         this.currentFragmentId = destination.getId();
+
+        if(appBarConfiguration!=null){
+            boolean isTopLevel = appBarConfiguration.getTopLevelDestinations().contains(currentFragmentId);
+            if(!isTopLevel){
+                new Handler().postDelayed(()->{
+                    mToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_24);
+                },0);
+            }
+        }
+        super.setTitle(destination.getLabel());
     }
 }

@@ -7,17 +7,19 @@
     <fragment
         android:id="@+id/itemListFragment"
         android:name="github.hmasum18.architecture.view.Fragments.ItemListFragment"
-        android:label="fragment_item_list"
+        android:label="Notes"
         tools:layout="@layout/fragment_item_list" >
         <action
             android:id="@+id/action_itemListFragment_to_addItemFragment"
             app:destination="@id/addItemFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out_to_right" />
     </fragment>
     <fragment
         android:id="@+id/addItemFragment"
         android:name="github.hmasum18.architecture.view.Fragments.AddItemFragment"
-        android:label="fragment_add_item"
+        android:label="Add Note"
         tools:layout="@layout/fragment_add_item" />
 </navigation>

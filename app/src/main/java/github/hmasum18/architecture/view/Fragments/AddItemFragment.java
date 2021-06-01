@@ -48,13 +48,10 @@ public class AddItemFragment extends Fragment implements IFragment {
         super.setHasOptionsMenu(true);
 
         if (getArguments() != null) {
-            note_id = this.getArguments().getInt("note_id",-1);
+            note_id = this.getArguments().getInt("note_id", -1);
             note_title = this.getArguments().getString("note_title");
             note_description = this.getArguments().getString("note_description");
             note_priority = this.getArguments().getInt("note_priority");
-            getActivity().setTitle("Edit note fragment");
-        }else {
-            getActivity().setTitle("Add note fragment");
         }
     }
 
@@ -79,8 +76,8 @@ public class AddItemFragment extends Fragment implements IFragment {
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_add_item, container, false);
-        setEnterTransition(new Explode());
-        setExitTransition(new Explode());
+        /*setEnterTransition(new Explode());
+        setExitTransition(new Explode());*/
 
         noteViewModel = new ViewModelProvider(requireActivity(),
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication())
