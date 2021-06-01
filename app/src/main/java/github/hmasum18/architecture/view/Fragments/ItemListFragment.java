@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,10 +39,34 @@ public class ItemListFragment extends Fragment implements IFragment {
     private NoteListAdapter noteListAdapter;
     private List<Note> allNotes;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //tutorial: https://developer.android.com/guide/fragments/appbar
+        Log.d(TAG, "onCreate: register to option menu click call backs");
+        super.setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        Log.d(TAG, "onCreateOptionsMenu: ");
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_one, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_one_delete_all_item) {
+            noteViewModel.deleteAllNotes();
+            Toast.makeText(getContext(), "All notes deleted", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         //find the views
@@ -105,13 +131,5 @@ public class ItemListFragment extends Fragment implements IFragment {
                 );
             }
         });
-    }
-
-    @Override
-    public void onOptionsMenuItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_one_delete_all_item) {
-            noteViewModel.deleteAllNotes();
-            Toast.makeText(getContext(), "All notes deleted", Toast.LENGTH_SHORT).show();
-        }
     }
 }

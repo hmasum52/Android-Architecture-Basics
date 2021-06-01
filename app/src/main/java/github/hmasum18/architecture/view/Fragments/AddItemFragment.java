@@ -12,6 +12,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.transition.Explode;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,9 +40,13 @@ public class AddItemFragment extends Fragment implements IFragment {
     private String note_description = "";
     private int note_priority = 1;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: ");
+        super.setHasOptionsMenu(true);
+
         if (getArguments() != null) {
             note_id = this.getArguments().getInt("note_id",-1);
             note_title = this.getArguments().getString("note_title");
@@ -53,8 +59,25 @@ public class AddItemFragment extends Fragment implements IFragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        Log.d(TAG, "onCreateOptionsMenu: ");
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.add_item,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        note_title_edtxt.setText("");
+        note_description_edtxt.setText("");
+        note_priority_numPkr.setValue(1);
+        Toast.makeText(getContext(),item.getTitle()+" clicked", Toast.LENGTH_SHORT).show();
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_add_item, container, false);
         setEnterTransition(new Explode());
         setExitTransition(new Explode());
@@ -79,6 +102,7 @@ public class AddItemFragment extends Fragment implements IFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d(TAG, "onViewCreated: ");
         //init the fields
         if(note_id != -1 &&!note_title.equals("") && !note_description.equals("") && note_priority>0)
         {
@@ -130,13 +154,5 @@ public class AddItemFragment extends Fragment implements IFragment {
     public void onDetach() {
         super.onDetach();
         Log.d(TAG, "onDetach: ");
-    }
-
-    @Override
-    public void onOptionsMenuItemSelected(@NonNull MenuItem item) {
-        note_title_edtxt.setText("");
-        note_description_edtxt.setText("");
-        note_priority_numPkr.setValue(1);
-        Toast.makeText(getContext(),item.getTitle()+" clicked", Toast.LENGTH_SHORT).show();
     }
 }

@@ -27,12 +27,6 @@ public class NoteViewModel extends AndroidViewModel {
     public void setCurrentFragment(IFragment currentFragment) {
         this.currentFragment = currentFragment;
     }
-    
-    public void onOptionsItemSelected(MenuItem menuItem){
-        Log.d(TAG, "onOptionsItemSelected: ");
-        if(currentFragment!=null)
-            currentFragment.onOptionsMenuItemSelected(menuItem);
-    }
 
     //note properties
     public void insert(Note note) {

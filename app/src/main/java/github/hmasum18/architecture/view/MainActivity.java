@@ -50,25 +50,6 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
         navController.addOnDestinationChangedListener(this);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d(TAG, "onCreateOptionsMenu: ");
-        if (currentFragmentId == R.id.itemListFragment) {
-            mToolbar.inflateMenu(R.menu.menu_one);
-        } else {
-            mToolbar.inflateMenu(R.menu.add_item);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Log.d(TAG, "onOptionsItemSelected: UwU");
-       //Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragmnet);
-        //this.currentFragment = (IFragment) navHostFragment.getChildFragmentManager().getFragments().get(0);
-        noteViewModel.onOptionsItemSelected(item);
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onDestroy() {
@@ -82,6 +63,5 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
                                      @Nullable Bundle arguments) {
         Log.d(TAG, "onDestinationChanged: current destination: "+navController.getCurrentDestination().getLabel());
         this.currentFragmentId = destination.getId();
-        super.invalidateOptionsMenu();
     }
 }
