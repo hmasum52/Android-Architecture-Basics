@@ -25,58 +25,43 @@ public class NoteRepo {
     @Inject
     NoteDao noteDao; // to update insert and add data in this table
 
-    private LiveData<List<Note>> allNotes; // observe all the notes in the table
-
-    public NoteRepo(Application application) {
-        AppComponent component = ((App)application).getAppComponent();
-        component.inject(this);
+    @Inject
+    public NoteRepo(){
     }
 
     public void insert(Note note) {
-        roomExecutorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                noteDao.insert(note);
-                Log.d(TAG,"execute: "+note.getTitle()+" inserted successfully");
-            }
+        roomExecutorService.execute(() -> {
+            noteDao.insert(note);
+            Log.d(TAG,"execute: "+note.getTitle()+" inserted successfully");
         });
     }
 
     public void update(Note note) {
-        roomExecutorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                noteDao.update(note);
-                Log.d(TAG,"execute: "+note.getTitle()+" updated successfully");
-            }
+        roomExecutorService.execute(() -> {
+            noteDao.update(note);
+            Log.d(TAG,"execute: "+note.getTitle()+" updated successfully");
         });
     }
 
     public void delete(Note note) {
-        roomExecutorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                noteDao.delete(note);
-                Log.d(TAG,"execute: "+note.getTitle()+" deleted successfully");
-            }
+        roomExecutorService.execute(() -> {
+            noteDao.delete(note);
+            Log.d(TAG,"execute: "+note.getTitle()+" deleted successfully");
         });
     }
 
     public void deleteAllNotes() {
-        roomExecutorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                noteDao.deleteAllNotes();
-                Log.d(TAG,"execute: all notes deleted successfully");
-            }
+        roomExecutorService.execute(() -> {
+            noteDao.deleteAllNotes();
+            Log.d(TAG,"execute: all notes deleted successfully");
         });
     }
 
     //Live data is observed in background thread
     public LiveData<List<Note>> getAllNotes() {
-        allNotes = noteDao.getAllNotes(); //so now we get all the notes from the note_table with the help of noteDao
+         //so now we get all the notes from the note_table with the help of noteDao
         Log.d(TAG,"getAllNotes: getting all notes");
-        return allNotes; //we don't have to create asyn task for this as room automatically do observe live data background thread
+        return noteDao.getAllNotes(); //we don't have to create asyn task for this as room automatically do observe live data background thread
     }
 
 }

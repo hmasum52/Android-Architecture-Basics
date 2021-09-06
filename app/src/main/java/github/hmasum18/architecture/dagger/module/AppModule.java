@@ -1,5 +1,7 @@
 package github.hmasum18.architecture.dagger.module;
 
+import android.app.Application;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -17,6 +19,12 @@ public class AppModule{
     @Provides
     @Singleton
     App provideApp(){
+        return app;
+    }
+
+    @Provides
+    @Singleton
+    Application provideApplication(){
         return app;
     }
 }

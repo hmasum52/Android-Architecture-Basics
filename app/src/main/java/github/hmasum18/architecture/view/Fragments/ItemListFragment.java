@@ -1,12 +1,10 @@
 package github.hmasum18.architecture.view.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,8 +21,6 @@ import android.widget.Toast;
 
 import github.hmasum18.architecture.R;
 import github.hmasum18.architecture.dagger.component.AppComponent;
-import github.hmasum18.architecture.dagger.component.MainActivityComponent;
-import github.hmasum18.architecture.dagger.module.MainActivityModule;
 import github.hmasum18.architecture.databinding.FragmentItemListBinding;
 import github.hmasum18.architecture.view.App;
 import github.hmasum18.architecture.view.IFragment;
@@ -32,10 +28,8 @@ import github.hmasum18.architecture.view.MainActivity;
 import github.hmasum18.architecture.viewModel.NoteViewModel;
 import github.hmasum18.architecture.service.model.Note;
 import github.hmasum18.architecture.view.Adapters.NoteListAdapter;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -101,6 +95,41 @@ public class ItemListFragment extends Fragment implements IFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated: ");
 
+        addSwipeListenerToRecyclerView();
+
+        //noteAdapter.setOnClickListener(new NoteAdapter.OnNoteItemClickListener() {
+        noteListAdapter.setOnClickListener(note -> {
+            Bundle bundle = new Bundle();
+            bundle.putInt("note_id",note.getId());
+            bundle.putString("note_title",note.getTitle());
+            bundle.putString("note_description",note.getDescription());
+            bundle.putInt("note_priority",note.getPriority());
+
+            NavHostFragment.findNavController(ItemListFragment.this).navigate(
+                    R.id.action_itemListFragment_to_addItemFragment,
+                    bundle,null,null
+            );
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+        AppComponent appComponent= ( (App) getActivity().getApplication() ).getAppComponent();
+        appComponent.inject(this);
+
+        noteViewModel.setCurrentFragment(this);
+        Log.d(TAG, "onResume: viewModel: "+noteViewModel);
+
+        noteViewModel.getAllNotes().observe(getViewLifecycleOwner(), notes ->{
+            noteListAdapter.submitList(notes);
+            allNotes = notes;
+            Log.d(TAG," notes received from testViewModel");
+        });
+    }
+
+    private void addSwipeListenerToRecyclerView(){
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -115,38 +144,5 @@ public class ItemListFragment extends Fragment implements IFragment {
                 Toast.makeText(getActivity().getApplicationContext(),"Note deleted successfully",Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(mVB.recyclerView); //attach to our recyclerView
-
-        //noteAdapter.setOnClickListener(new NoteAdapter.OnNoteItemClickListener() {
-        noteListAdapter.setOnClickListener(new NoteListAdapter.OnNoteItemClickListener() {
-            @Override
-            public void onNoteItemClick(Note note) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("note_id",note.getId());
-                bundle.putString("note_title",note.getTitle());
-                bundle.putString("note_description",note.getDescription());
-                bundle.putInt("note_priority",note.getPriority());
-
-                NavHostFragment.findNavController(ItemListFragment.this).navigate(
-                        R.id.action_itemListFragment_to_addItemFragment,
-                        bundle,null,null
-                );
-            }
-        });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: ");
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.mainActivityComponent.inject(this);
-
-        noteViewModel.setCurrentFragment(this);
-
-        noteViewModel.getAllNotes().observe(getViewLifecycleOwner(), notes ->{
-            noteListAdapter.submitList(notes);
-            allNotes = notes;
-            Log.d(TAG," notes received from testViewModel");
-        });
     }
 }

@@ -3,21 +3,13 @@ package github.hmasum18.architecture.view;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -25,16 +17,12 @@ import javax.inject.Inject;
 
 import github.hmasum18.architecture.R;
 import github.hmasum18.architecture.dagger.component.AppComponent;
-import github.hmasum18.architecture.dagger.component.MainActivityComponent;
-import github.hmasum18.architecture.dagger.module.MainActivityModule;
 import github.hmasum18.architecture.databinding.ActivityMainBinding;
-import github.hmasum18.architecture.view.Fragments.ItemListFragment;
 import github.hmasum18.architecture.viewModel.NoteViewModel;
 
 public class MainActivity extends AppCompatActivity implements NavController.OnDestinationChangedListener {
 
     public static final String TAG = "MainActivity->";
-    public MainActivityComponent mainActivityComponent;
 
     private ActivityMainBinding mVB;
 
@@ -53,15 +41,9 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
 
         // init dagger components
         AppComponent appComponent = ((App)getApplication()).getAppComponent();
-        mainActivityComponent = appComponent.getMainActivityComponentBuilder()
-                .mainActivityModule(new MainActivityModule(this))
-                .build();
-        mainActivityComponent.inject(this);
-        Log.d(TAG, "onCreate: "+mainActivityComponent);
+        appComponent.inject(this);
+        Log.d(TAG, "onCreate: viewModel: "+noteViewModel);
 
-        /*noteViewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()))
-                .get(NoteViewModel.class);*/
 
         //find and set toolbar as actionbar
         super.setSupportActionBar(mVB.toolbar);

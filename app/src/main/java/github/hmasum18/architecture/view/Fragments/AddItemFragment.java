@@ -25,7 +25,9 @@ import android.widget.Toast;
 import javax.inject.Inject;
 
 import github.hmasum18.architecture.R;
+import github.hmasum18.architecture.dagger.component.AppComponent;
 import github.hmasum18.architecture.databinding.FragmentAddItemBinding;
+import github.hmasum18.architecture.view.App;
 import github.hmasum18.architecture.view.IFragment;
 import github.hmasum18.architecture.view.MainActivity;
 import github.hmasum18.architecture.viewModel.NoteViewModel;
@@ -34,7 +36,8 @@ import github.hmasum18.architecture.service.model.Note;
 public class AddItemFragment extends Fragment implements IFragment {
     public static final String TAG = "AddItemFragment->";
     private FragmentAddItemBinding mVB;
-    private NoteViewModel noteViewModel;
+    @Inject
+    NoteViewModel noteViewModel;
 
     private int note_id  = -1;
     private String note_title = "";
@@ -79,9 +82,10 @@ public class AddItemFragment extends Fragment implements IFragment {
         mVB = FragmentAddItemBinding.inflate(inflater, container,false);
         View view = mVB.getRoot();
 
-        MainActivity mainActivity = (MainActivity) getActivity();
-        noteViewModel = mainActivity.mainActivityComponent.getNoteViewModel();
+        AppComponent appComponent= ( (App) getActivity().getApplication() ).getAppComponent();
+        appComponent.inject(this);
         noteViewModel.setCurrentFragment(this);
+        Log.d(TAG, "onCreateView: viewModel: "+noteViewModel);
 
         // Inflate the layout for this fragment
         //and find the views
