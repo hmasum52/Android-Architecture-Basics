@@ -1,19 +1,25 @@
 package github.hmasum18.architecture.service.model;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "product_table")
 public class Product {
+    @PrimaryKey //for room
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private int id;
     @SerializedName("title")
     @Expose
     private String title;
     @SerializedName("price")
     @Expose
-    private Double price;
+    private double price;
     @SerializedName("description")
     @Expose
     private String description;
@@ -23,41 +29,23 @@ public class Product {
     @SerializedName("image")
     @Expose
     private String image;
+
+    @Ignore // ignore by room
     @SerializedName("rating")
     @Expose
     private Rating rating;
 
-    /**
-     * No args constructor for use in serialization
-     */
+    @Expose(serialize = false, deserialize = false)
+    private String ratingString;
+
     public Product() {
     }
 
-    /**
-     * @param image
-     * @param price
-     * @param rating
-     * @param description
-     * @param id
-     * @param title
-     * @param category
-     */
-    public Product(Integer id, String title, Double price, String description, String category, String image, Rating rating) {
-        super();
-        this.id = id;
-        this.title = title;
-        this.price = price;
-        this.description = description;
-        this.category = category;
-        this.image = image;
-        this.rating = rating;
-    }
-
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -69,11 +57,11 @@ public class Product {
         this.title = title;
     }
 
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -107,6 +95,15 @@ public class Product {
 
     public void setRating(Rating rating) {
         this.rating = rating;
+    }
+
+    public String getRatingString() {
+        return rating.toString();
+    }
+
+    public void setRatingString(String ratingString) {
+        this.rating = new Gson().fromJson(ratingString, Rating.class);
+        this.ratingString = ratingString;
     }
 
     @Override

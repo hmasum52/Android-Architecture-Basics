@@ -1,6 +1,5 @@
 package github.hmasum18.architecture.dagger.module;
 
-import android.content.Context;
 import android.util.Log;
 
 import androidx.room.Room;
@@ -13,7 +12,9 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import github.hmasum18.architecture.service.room.Doas.NoteDao;
+import github.hmasum18.architecture.service.room.Doas.ProductDao;
 import github.hmasum18.architecture.service.room.NoteDataBase;
+import github.hmasum18.architecture.service.room.FakeStoreDataBase;
 import github.hmasum18.architecture.view.App;
 
 @Module
@@ -47,6 +48,22 @@ public abstract class RoomModule{
     static NoteDao provideNoteDao(App app){
         Log.d(TAG, "provideNoteDao: creating note dao...");
         return provideNoteDataBase(app).noteDao();
+    }
+
+    @Provides
+    @Singleton
+    static FakeStoreDataBase provideFakeStoreDataBase(App app){
+        Log.d(TAG, "provideNoteDataBase: creating note database...");
+        return Room.databaseBuilder(app.getApplicationContext(),
+                FakeStoreDataBase.class , "fake_store")
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    static ProductDao provideProductDao(App app){
+        Log.d(TAG, "provideNoteDao: creating note dao...");
+        return provideFakeStoreDataBase(app).productDao();
     }
 
 
