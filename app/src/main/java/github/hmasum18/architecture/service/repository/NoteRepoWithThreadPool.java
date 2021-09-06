@@ -5,25 +5,35 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
+import github.hmasum18.architecture.dagger.component.AppComponent;
 import github.hmasum18.architecture.service.room.Doas.NoteDao;
 import github.hmasum18.architecture.service.room.NoteDataBase;
 import github.hmasum18.architecture.service.model.Note;
+import github.hmasum18.architecture.view.App;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+
+import javax.inject.Inject;
 
 public class NoteRepoWithThreadPool {
     public static final String TAG = "TestRepository->";
-    private NoteDataBase noteDataBase;
-    private NoteDao noteDao; // to update insert and add data in this table
+
+    @Inject
+    ExecutorService roomExecutorService;
+
+    @Inject
+    NoteDao noteDao; // to update insert and add data in this table
+
     private LiveData<List<Note>> allNotes; // observe all the notes in the table
 
     public NoteRepoWithThreadPool(Application application) {
-         noteDataBase = NoteDataBase.getInstance(application); // make the database or get existing
-        noteDao = noteDataBase.noteDao(); // get the noteDao to access data from note_table of this database
+        AppComponent component = ((App)application).getAppComponent();
+        component.inject(this);
     }
 
     public void insert(Note note) {
-        noteDataBase.executorService.execute(new Runnable() {
+        roomExecutorService.execute(new Runnable() {
             @Override
             public void run() {
                 noteDao.insert(note);
@@ -33,7 +43,7 @@ public class NoteRepoWithThreadPool {
     }
 
     public void update(Note note) {
-        noteDataBase.executorService.execute(new Runnable() {
+        roomExecutorService.execute(new Runnable() {
             @Override
             public void run() {
                 noteDao.update(note);
@@ -43,7 +53,7 @@ public class NoteRepoWithThreadPool {
     }
 
     public void delete(Note note) {
-        noteDataBase.executorService.execute(new Runnable() {
+        roomExecutorService.execute(new Runnable() {
             @Override
             public void run() {
                 noteDao.delete(note);
@@ -53,7 +63,7 @@ public class NoteRepoWithThreadPool {
     }
 
     public void deleteAllNotes() {
-        noteDataBase.executorService.execute(new Runnable() {
+        roomExecutorService.execute(new Runnable() {
             @Override
             public void run() {
                 noteDao.deleteAllNotes();
