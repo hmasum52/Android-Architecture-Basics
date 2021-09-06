@@ -14,8 +14,8 @@
             android:icon="@drawable/ic_baseline_refresh_24"
             />
         <item
-            android:id="@+id/premium_subscription"
-            android:title="Premium" />
+            android:id="@+id/fake_store"
+            android:title="Fake Store" />
     </group>
 
 </menu>

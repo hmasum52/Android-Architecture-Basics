@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="github.hmasum18.architecture">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".view.App"
         android:allowBackup="true"
@@ -18,6 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

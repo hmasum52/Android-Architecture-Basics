@@ -44,20 +44,6 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
 
-    def lifecycle_version = "2.2.0"
-    // ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
-    // LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
-    // Lifecycles only (without ViewModel or LiveData)
-    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
-    // Saved state module for ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
-    // Annotation processor
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
-    // alternately - if using Java8, use the following instead of lifecycle-compiler
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
-
     //add room database dependency
     def room_version = "2.2.5"
     implementation "androidx.room:room-runtime:$room_version"
@@ -66,4 +52,15 @@ dependencies {
     // dependency injection
     implementation 'com.google.dagger:dagger:2.28.3'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.28.3'
+
+    // retrofit for networking
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    //for debugging with retrofit
+    //for logging http request by retrofit
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+
+    //added glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }

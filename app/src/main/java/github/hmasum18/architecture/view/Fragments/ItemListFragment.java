@@ -24,7 +24,6 @@ import github.hmasum18.architecture.dagger.component.AppComponent;
 import github.hmasum18.architecture.databinding.FragmentItemListBinding;
 import github.hmasum18.architecture.view.App;
 import github.hmasum18.architecture.view.IFragment;
-import github.hmasum18.architecture.view.MainActivity;
 import github.hmasum18.architecture.viewModel.NoteViewModel;
 import github.hmasum18.architecture.service.model.Note;
 import github.hmasum18.architecture.view.Adapters.NoteListAdapter;
@@ -55,7 +54,7 @@ public class ItemListFragment extends Fragment implements IFragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         Log.d(TAG, "onCreateOptionsMenu: ");
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_one, menu);
+        inflater.inflate(R.menu.item_list, menu);
     }
 
     @Override
@@ -63,8 +62,10 @@ public class ItemListFragment extends Fragment implements IFragment {
         if (item.getItemId() == R.id.menu_one_delete_all_item) {
             noteViewModel.deleteAllNotes();
             Toast.makeText(getContext(), "All notes deleted", Toast.LENGTH_SHORT).show();
-        }else if (item.getItemId() == R.id.premium_subscription){
-            Toast.makeText(getContext(), "Premium", Toast.LENGTH_SHORT).show();
+        } else if (item.getItemId() == R.id.fake_store) {
+            NavHostFragment.findNavController(ItemListFragment.this).navigate(
+                    R.id.fakeStoreFragment
+            );
         }
         return super.onOptionsItemSelected(item);
     }
@@ -84,7 +85,7 @@ public class ItemListFragment extends Fragment implements IFragment {
         noteListAdapter = new NoteListAdapter();
         mVB.recyclerView.setAdapter(noteListAdapter);
 
-        mVB.listFragFabId.setOnClickListener( v -> {
+        mVB.listFragFabId.setOnClickListener(v -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_itemListFragment_to_addItemFragment);
         });
         return view;
@@ -100,14 +101,14 @@ public class ItemListFragment extends Fragment implements IFragment {
         //noteAdapter.setOnClickListener(new NoteAdapter.OnNoteItemClickListener() {
         noteListAdapter.setOnClickListener(note -> {
             Bundle bundle = new Bundle();
-            bundle.putInt("note_id",note.getId());
-            bundle.putString("note_title",note.getTitle());
-            bundle.putString("note_description",note.getDescription());
-            bundle.putInt("note_priority",note.getPriority());
+            bundle.putInt("note_id", note.getId());
+            bundle.putString("note_title", note.getTitle());
+            bundle.putString("note_description", note.getDescription());
+            bundle.putInt("note_priority", note.getPriority());
 
             NavHostFragment.findNavController(ItemListFragment.this).navigate(
                     R.id.action_itemListFragment_to_addItemFragment,
-                    bundle,null,null
+                    bundle, null, null
             );
         });
     }
@@ -116,20 +117,20 @@ public class ItemListFragment extends Fragment implements IFragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: ");
-        AppComponent appComponent= ( (App) getActivity().getApplication() ).getAppComponent();
+        AppComponent appComponent = ((App) getActivity().getApplication()).getAppComponent();
         appComponent.inject(this);
 
         noteViewModel.setCurrentFragment(this);
-        Log.d(TAG, "onResume: viewModel: "+noteViewModel);
+        Log.d(TAG, "onResume: viewModel: " + noteViewModel);
 
-        noteViewModel.getAllNotes().observe(getViewLifecycleOwner(), notes ->{
+        noteViewModel.getAllNotes().observe(getViewLifecycleOwner(), notes -> {
             noteListAdapter.submitList(notes);
             allNotes = notes;
-            Log.d(TAG," notes received from testViewModel");
+            Log.d(TAG, " notes received from testViewModel");
         });
     }
 
-    private void addSwipeListenerToRecyclerView(){
+    private void addSwipeListenerToRecyclerView() {
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -141,7 +142,7 @@ public class ItemListFragment extends Fragment implements IFragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 //noteViewModel.delete( allNotes.get(viewHolder.getAdapterPosition()) );
                 noteViewModel.delete(allNotes.get(viewHolder.getAdapterPosition()));
-                Toast.makeText(getActivity().getApplicationContext(),"Note deleted successfully",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), "Note deleted successfully", Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(mVB.recyclerView); //attach to our recyclerView
     }
