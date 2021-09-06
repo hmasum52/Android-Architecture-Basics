@@ -27,4 +27,9 @@
         android:name="github.hmasum18.architecture.view.Fragments.FakeStoreFragment"
         android:label="Fake store"
         tools:layout="@layout/fragment_fake_store" />
-</navigation>
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="github.hmasum18.architecture.view.Fragments.ProductDetailsFragment"
+        android:label="Details"
+        tools:layout="@layout/fragment_product_details" />
+   </navigation>

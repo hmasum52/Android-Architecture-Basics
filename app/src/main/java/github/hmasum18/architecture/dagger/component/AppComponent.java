@@ -11,6 +11,7 @@ import github.hmasum18.architecture.service.repository.ProductRepo;
 import github.hmasum18.architecture.view.Fragments.AddItemFragment;
 import github.hmasum18.architecture.view.Fragments.FakeStoreFragment;
 import github.hmasum18.architecture.view.Fragments.ItemListFragment;
+import github.hmasum18.architecture.view.Fragments.ProductDetailsFragment;
 import github.hmasum18.architecture.view.MainActivity;
 
 @Singleton
@@ -26,4 +27,5 @@ public interface AppComponent{
     void inject(AddItemFragment addItemFragment);
 
     void inject(FakeStoreFragment fakeStoreFragment);
+    void inject(ProductDetailsFragment productDetailsFragment);
 }

@@ -3,7 +3,6 @@ package github.hmasum18.architecture.service.repository;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -37,7 +36,7 @@ public class ProductRepo {
 
     public LiveData<List<Product>> getProducts() {
         fetchProducts();
-        return productDao.getAllProducts();
+        return productDao.getAllProductsLiveData();
     }
 
     public void fetchProducts() {
@@ -56,6 +55,28 @@ public class ProductRepo {
                     @Override
                     public void onFailure(Exception e) {
                         Log.e(TAG, "onFailure: failed fetching products");
+                    }
+                });
+    }
+
+    public LiveData<Product> getProduct(int productId) {
+        return  productDao.getProductLiveDataById(productId);
+    }
+
+    private void fetchProductById(int productId) {
+        JsonApiCaller<Product> caller = new JsonApiCaller<>(Product.class, retrofit);
+        caller.GET("products/"+productId)
+                .addOnFinishListener(new OnFinishListener<Product>() {
+                    @Override
+                    public void onSuccess(Product product) {
+                        roomExecutorService.execute(()->{
+                            productDao.insert(product);
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
                     }
                 });
     }

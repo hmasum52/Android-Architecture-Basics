@@ -31,5 +31,8 @@ public interface ProductDao{
 
     //live data will observe any change in the note_table
     @Query("SELECT * FROM product_table")
-    LiveData<List<Product>> getAllProducts();
+    LiveData<List<Product>> getAllProductsLiveData();
+
+    @Query("SELECT * FROM product_table WHERE id=:id")
+    LiveData<Product> getProductLiveDataById(int id);
 }

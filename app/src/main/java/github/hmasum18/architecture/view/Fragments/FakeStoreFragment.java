@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,10 +49,17 @@ public class FakeStoreFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         productViewModel.getProducts()
                 .observe(getViewLifecycleOwner(), products -> {
                     productAdapter.setProductList(products);
                 });
+
+        productAdapter.setProductOnClickListener(product -> {
+            Bundle bundle = new Bundle();
+            bundle.putInt(ProductDetailsFragment.PRODUCT_ID, product.getId());
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.productDetailsFragment, bundle);
+        });
     }
 }

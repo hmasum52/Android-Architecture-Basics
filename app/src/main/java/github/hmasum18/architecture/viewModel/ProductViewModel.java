@@ -24,4 +24,8 @@ public class ProductViewModel extends ViewModel {
     public LiveData<List<Product>> getProducts(){
         return productRepo.getProducts();
     }
+
+    public LiveData<Product> getProduct(int productId){
+        return productRepo.getProduct(productId);
+    }
 }
