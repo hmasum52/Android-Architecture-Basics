@@ -5,6 +5,7 @@ import android.util.Log;
 
 import github.hmasum18.architecture.dagger.component.AppComponent;
 import github.hmasum18.architecture.dagger.component.DaggerAppComponent;
+import github.hmasum18.architecture.dagger.module.AppModule;
 import github.hmasum18.architecture.dagger.module.RoomModule;
 
 public class App extends Application {
@@ -16,7 +17,7 @@ public class App extends Application {
         super.onCreate();
         Log.d(TAG, "onCreate: ");
         appComponent = DaggerAppComponent.builder().
-                roomModule(new RoomModule(getApplicationContext()))
+                appModule(new AppModule(this))
                 .build();
 
         Log.d(TAG, "onCreate: app component created successfully");

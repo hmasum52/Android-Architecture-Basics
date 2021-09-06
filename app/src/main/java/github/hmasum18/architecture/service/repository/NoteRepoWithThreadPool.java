@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutorService;
 import javax.inject.Inject;
 
 public class NoteRepoWithThreadPool {
-    public static final String TAG = "TestRepository->";
+    public static final String TAG = "NoteRepository->";
 
     @Inject
     ExecutorService roomExecutorService;
