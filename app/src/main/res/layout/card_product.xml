@@ -12,7 +12,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#E6E6E6E6"
         >
 
         <ImageView
@@ -45,9 +44,10 @@
 
         <TextView
             android:id="@+id/tv_category_name"
-            style="@style/TextAppearance.AppCompat.Body1"
+            style="@style/TextAppearance.AppCompat.Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:textColor="#A19CA1"
             app:layout_constraintEnd_toEndOf="@+id/tv_product_name"
             app:layout_constraintStart_toStartOf="@+id/tv_product_name"
