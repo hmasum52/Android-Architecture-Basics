@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
     private int currentFragmentId;
     private AppBarConfiguration appBarConfiguration;
     private Toolbar mToolbar;
-    private IFragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
         //find and set toolbar as actionbar
         mToolbar = super.findViewById(R.id.toolbar);
         super.setSupportActionBar(mToolbar);
+        mToolbar.setLogo(R.drawable.ic_launcher_foreground);
+
 
         //find and add destination changed listener to nav controller.
         navController = Navigation.findNavController(this, R.id.nav_host_fragmnet);
@@ -78,9 +79,14 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
         if(appBarConfiguration!=null){
             boolean isTopLevel = appBarConfiguration.getTopLevelDestinations().contains(currentFragmentId);
             if(!isTopLevel){
-                new Handler().postDelayed(()->{
+                new Handler().post(()->{
                     mToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_24);
-                },0);
+                    mToolbar.getLogo().setVisible(false,false);
+                });
+            }else if(currentFragmentId == R.id.itemListFragment){
+                new Handler().post(()->{
+                   // mToolbar.getLogo().set(true,false);
+                    });
             }
         }
         super.setTitle(destination.getLabel());

@@ -59,6 +59,8 @@ public class ItemListFragment extends Fragment implements IFragment {
         if (item.getItemId() == R.id.menu_one_delete_all_item) {
             noteViewModel.deleteAllNotes();
             Toast.makeText(getContext(), "All notes deleted", Toast.LENGTH_SHORT).show();
+        }else if (item.getItemId() == R.id.premium_subscription){
+            Toast.makeText(getContext(), "Premium", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }
