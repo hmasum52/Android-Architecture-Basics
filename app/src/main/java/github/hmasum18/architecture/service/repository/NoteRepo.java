@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 
-public class NoteRepoWithThreadPool {
+public class NoteRepo {
     public static final String TAG = "NoteRepository->";
 
     @Inject
@@ -27,7 +27,7 @@ public class NoteRepoWithThreadPool {
 
     private LiveData<List<Note>> allNotes; // observe all the notes in the table
 
-    public NoteRepoWithThreadPool(Application application) {
+    public NoteRepo(Application application) {
         AppComponent component = ((App)application).getAppComponent();
         component.inject(this);
     }

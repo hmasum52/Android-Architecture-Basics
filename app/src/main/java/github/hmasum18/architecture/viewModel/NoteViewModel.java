@@ -2,13 +2,12 @@ package github.hmasum18.architecture.viewModel;
 
 import android.app.Application;
 import android.util.Log;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import github.hmasum18.architecture.service.repository.NoteRepoWithThreadPool;
+import github.hmasum18.architecture.service.repository.NoteRepo;
 import github.hmasum18.architecture.service.model.Note;
 import github.hmasum18.architecture.view.IFragment;
 
@@ -16,12 +15,12 @@ import java.util.List;
 
 public class NoteViewModel extends AndroidViewModel {
     public static final String TAG = "NoteViewModel->";
-    private final NoteRepoWithThreadPool noteRepoWithThreadPool;
+    private final NoteRepo noteRepo;
     private IFragment currentFragment;
 
     public NoteViewModel(@NonNull Application application) {
         super(application);
-        noteRepoWithThreadPool = new NoteRepoWithThreadPool(application);
+        noteRepo = new NoteRepo(application);
     }
 
     public void setCurrentFragment(IFragment currentFragment) {
@@ -30,24 +29,24 @@ public class NoteViewModel extends AndroidViewModel {
 
     //note properties
     public void insert(Note note) {
-        noteRepoWithThreadPool.insert(note);
+        noteRepo.insert(note);
     }
 
     public void update(Note note) {
-        noteRepoWithThreadPool.update(note);
+        noteRepo.update(note);
     }
 
     public void delete(Note note) {
-        noteRepoWithThreadPool.delete(note);
+        noteRepo.delete(note);
     }
 
     public void deleteAllNotes() {
-        noteRepoWithThreadPool.deleteAllNotes();
+        noteRepo.deleteAllNotes();
     }
 
     //Live data is observed in background thread
     public LiveData<List<Note>> getAllNotes() {
-        return noteRepoWithThreadPool.getAllNotes(); //we don't have to create asyn task for this as room automatically do observe live data background thread
+        return noteRepo.getAllNotes(); //we don't have to create asyn task for this as room automatically do observe live data background thread
     }
 
     @Override

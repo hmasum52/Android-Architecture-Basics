@@ -22,6 +22,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import github.hmasum18.architecture.R;
+import github.hmasum18.architecture.dagger.component.AppComponent;
+import github.hmasum18.architecture.dagger.component.MainActivityComponent;
+import github.hmasum18.architecture.dagger.module.MainActivityModule;
+import github.hmasum18.architecture.databinding.FragmentItemListBinding;
+import github.hmasum18.architecture.view.App;
 import github.hmasum18.architecture.view.IFragment;
 import github.hmasum18.architecture.view.MainActivity;
 import github.hmasum18.architecture.viewModel.NoteViewModel;
@@ -30,12 +35,17 @@ import github.hmasum18.architecture.view.Adapters.NoteListAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
+import java.util.Objects;
+
+import javax.inject.Inject;
 
 public class ItemListFragment extends Fragment implements IFragment {
     public static final String TAG = "ItemListFragment->";
-    private RecyclerView  recyclerView;
-    private NoteViewModel noteViewModel;
-    private FloatingActionButton addFab;
+    private FragmentItemListBinding mVB;
+
+    @Inject
+    NoteViewModel noteViewModel;
+
     private NoteListAdapter noteListAdapter;
     private List<Note> allNotes;
 
@@ -69,18 +79,18 @@ public class ItemListFragment extends Fragment implements IFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
+
+        mVB = FragmentItemListBinding.inflate(inflater, container, false);
+
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
-        //find the views
-        recyclerView = view.findViewById(R.id.recycler_view);
-        addFab = view.findViewById(R.id.listFrag_fabId);
+        View view = mVB.getRoot();
 
         //add adapters and listeners
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        mVB.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         noteListAdapter = new NoteListAdapter();
-        recyclerView.setAdapter(noteListAdapter);
+        mVB.recyclerView.setAdapter(noteListAdapter);
 
-        addFab.setOnClickListener( v -> {
+        mVB.listFragFabId.setOnClickListener( v -> {
             NavHostFragment.findNavController(this).navigate(R.id.action_itemListFragment_to_addItemFragment);
         });
         return view;
@@ -89,18 +99,7 @@ public class ItemListFragment extends Fragment implements IFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        noteViewModel = new ViewModelProvider(requireActivity(),
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()))
-                .get(NoteViewModel.class);
-
-        noteViewModel.setCurrentFragment(this);
-
-        noteViewModel.getAllNotes().observe(getViewLifecycleOwner(), notes ->{
-            noteListAdapter.submitList(notes);
-            allNotes = notes;
-            Log.d(TAG," notes received from testViewModel");
-        });
+        Log.d(TAG, "onViewCreated: ");
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -115,7 +114,7 @@ public class ItemListFragment extends Fragment implements IFragment {
                 noteViewModel.delete(allNotes.get(viewHolder.getAdapterPosition()));
                 Toast.makeText(getActivity().getApplicationContext(),"Note deleted successfully",Toast.LENGTH_SHORT).show();
             }
-        }).attachToRecyclerView(recyclerView); //attach to our recyclerView
+        }).attachToRecyclerView(mVB.recyclerView); //attach to our recyclerView
 
         //noteAdapter.setOnClickListener(new NoteAdapter.OnNoteItemClickListener() {
         noteListAdapter.setOnClickListener(new NoteListAdapter.OnNoteItemClickListener() {
@@ -132,6 +131,22 @@ public class ItemListFragment extends Fragment implements IFragment {
                         bundle,null,null
                 );
             }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.mainActivityComponent.inject(this);
+
+        noteViewModel.setCurrentFragment(this);
+
+        noteViewModel.getAllNotes().observe(getViewLifecycleOwner(), notes ->{
+            noteListAdapter.submitList(notes);
+            allNotes = notes;
+            Log.d(TAG," notes received from testViewModel");
         });
     }
 }

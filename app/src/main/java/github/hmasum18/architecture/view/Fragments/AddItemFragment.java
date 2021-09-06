@@ -22,7 +22,10 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
 import github.hmasum18.architecture.R;
+import github.hmasum18.architecture.databinding.FragmentAddItemBinding;
 import github.hmasum18.architecture.view.IFragment;
 import github.hmasum18.architecture.view.MainActivity;
 import github.hmasum18.architecture.viewModel.NoteViewModel;
@@ -30,9 +33,7 @@ import github.hmasum18.architecture.service.model.Note;
 
 public class AddItemFragment extends Fragment implements IFragment {
     public static final String TAG = "AddItemFragment->";
-    private EditText note_title_edtxt, note_description_edtxt;
-    private NumberPicker note_priority_numPkr;
-    private Button save_btn;
+    private FragmentAddItemBinding mVB;
     private NoteViewModel noteViewModel;
 
     private int note_id  = -1;
@@ -64,9 +65,9 @@ public class AddItemFragment extends Fragment implements IFragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        note_title_edtxt.setText("");
-        note_description_edtxt.setText("");
-        note_priority_numPkr.setValue(1);
+        mVB.addFragTitleId.setText("");
+        mVB.addFragDescriptionId.setText("");
+        mVB.addFragPriorityPicker.setValue(1);
         Toast.makeText(getContext(),item.getTitle()+" clicked", Toast.LENGTH_SHORT).show();
         return super.onOptionsItemSelected(item);
     }
@@ -75,24 +76,17 @@ public class AddItemFragment extends Fragment implements IFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView: ");
-        View view = inflater.inflate(R.layout.fragment_add_item, container, false);
-        /*setEnterTransition(new Explode());
-        setExitTransition(new Explode());*/
+        mVB = FragmentAddItemBinding.inflate(inflater, container,false);
+        View view = mVB.getRoot();
 
-        noteViewModel = new ViewModelProvider(requireActivity(),
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication())
-        ).get(NoteViewModel.class);
-
+        MainActivity mainActivity = (MainActivity) getActivity();
+        noteViewModel = mainActivity.mainActivityComponent.getNoteViewModel();
         noteViewModel.setCurrentFragment(this);
 
         // Inflate the layout for this fragment
         //and find the views
-        note_title_edtxt = view.findViewById(R.id.addFrag_titleId);
-        note_description_edtxt = view.findViewById(R.id.addFrag_descriptionId);
-        note_priority_numPkr = view.findViewById(R.id.addFrag_priority_picker);
-        note_priority_numPkr.setMinValue(1);
-        note_priority_numPkr.setMaxValue(10);
-        save_btn = view.findViewById(R.id.addFrag_saveBtnId);
+        mVB.addFragPriorityPicker.setMinValue(1);
+        mVB.addFragPriorityPicker.setMaxValue(10);
         return view;
     }
 
@@ -101,14 +95,13 @@ public class AddItemFragment extends Fragment implements IFragment {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated: ");
         //init the fields
-        if(note_id != -1 &&!note_title.equals("") && !note_description.equals("") && note_priority>0)
-        {
-            note_title_edtxt.setText(note_title);
-            note_description_edtxt.setText(note_description);
-            note_priority_numPkr.setValue(note_priority);
+        if(note_id != -1 &&!note_title.equals("") && !note_description.equals("") && note_priority>0) {
+            mVB.addFragTitleId.setText(note_title);
+            mVB.addFragDescriptionId.setText(note_description);
+            mVB.addFragPriorityPicker.setValue(note_priority);
         }
 
-        save_btn.setOnClickListener( v -> {
+        mVB.addFragSaveBtnId.setOnClickListener( v -> {
             saveNote();
             NavHostFragment.findNavController(this).popBackStack();
             Toast.makeText(getActivity().getApplicationContext(),"Note saved successfully",Toast.LENGTH_SHORT).show();
@@ -116,9 +109,9 @@ public class AddItemFragment extends Fragment implements IFragment {
     }
 
     private void saveNote() {
-        String title = note_title_edtxt.getText().toString();
-        String description = note_description_edtxt.getText().toString();
-        int priority = note_priority_numPkr.getValue();
+        String title = mVB.addFragTitleId.getText().toString();
+        String description =  mVB.addFragDescriptionId.getText().toString();
+        int priority = mVB.addFragPriorityPicker.getValue();
 
         if(title.trim().isEmpty() || description.trim().isEmpty() ) {
             Toast.makeText(getActivity().getApplicationContext(), "Please insert all the data", Toast.LENGTH_SHORT).show();
