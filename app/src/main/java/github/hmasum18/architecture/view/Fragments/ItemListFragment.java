@@ -58,10 +58,7 @@ public class ItemListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_one_delete_all_item) {
-            noteViewModel.deleteAllNotes();
-            Toast.makeText(getContext(), "All notes deleted", Toast.LENGTH_SHORT).show();
-        } else if (item.getItemId() == R.id.fake_store) {
+        if (item.getItemId() == R.id.switch_app) {
             NavHostFragment.findNavController(ItemListFragment.this).navigate(
                     R.id.fakeStoreFragment
             );

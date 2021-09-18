@@ -7,17 +7,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
 import github.hmasum18.architecture.R;
 import github.hmasum18.architecture.dagger.component.AppComponent;
-import github.hmasum18.architecture.databinding.FragmentAddItemBinding;
 import github.hmasum18.architecture.databinding.FragmentFakeStoreBinding;
 import github.hmasum18.architecture.view.Adapters.ProductAdapter;
 import github.hmasum18.architecture.view.App;
@@ -25,6 +26,8 @@ import github.hmasum18.architecture.viewModel.ProductViewModel;
 
 
 public class FakeStoreFragment extends Fragment {
+    private static final String TAG = "FakeStoreFragment";
+
     private FragmentFakeStoreBinding mVB;
 
     @Inject
@@ -32,6 +35,32 @@ public class FakeStoreFragment extends Fragment {
 
     @Inject
     ProductAdapter productAdapter;
+
+    @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //tutorial: https://developer.android.com/guide/fragments/appbar
+        Log.d(TAG, "onCreate: register to option menu click call backs");
+        super.setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        Log.d(TAG, "onCreateOptionsMenu: ");
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.item_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+       if (item.getItemId() == R.id.switch_app) {
+            NavHostFragment.findNavController(this).navigate(
+                    R.id.itemListFragment
+            );
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

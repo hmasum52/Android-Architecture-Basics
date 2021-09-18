@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavController.OnD
 
         //create app bar configuration
         appBarConfiguration = new AppBarConfiguration
-                .Builder(R.id.itemListFragment).build();
+                .Builder(R.id.itemListFragment,R.id.fakeStoreFragment).build();
 
         NavigationUI.setupWithNavController(mVB.toolbar,navController,appBarConfiguration);
 

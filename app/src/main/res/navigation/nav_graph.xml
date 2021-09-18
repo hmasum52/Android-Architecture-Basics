@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/itemListFragment">
+    app:startDestination="@id/fakeStoreFragment">
     <fragment
         android:id="@+id/itemListFragment"
         android:name="github.hmasum18.architecture.view.Fragments.ItemListFragment"
