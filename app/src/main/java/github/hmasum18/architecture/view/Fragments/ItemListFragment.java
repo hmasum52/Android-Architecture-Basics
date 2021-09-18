@@ -23,7 +23,6 @@ import github.hmasum18.architecture.R;
 import github.hmasum18.architecture.dagger.component.AppComponent;
 import github.hmasum18.architecture.databinding.FragmentItemListBinding;
 import github.hmasum18.architecture.view.App;
-import github.hmasum18.architecture.view.IFragment;
 import github.hmasum18.architecture.viewModel.NoteViewModel;
 import github.hmasum18.architecture.service.model.Note;
 import github.hmasum18.architecture.view.Adapters.NoteListAdapter;
@@ -32,7 +31,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class ItemListFragment extends Fragment implements IFragment {
+public class ItemListFragment extends Fragment {
     public static final String TAG = "ItemListFragment->";
     private FragmentItemListBinding mVB;
 
@@ -120,7 +119,6 @@ public class ItemListFragment extends Fragment implements IFragment {
         AppComponent appComponent = ((App) getActivity().getApplication()).getAppComponent();
         appComponent.inject(this);
 
-        noteViewModel.setCurrentFragment(this);
         Log.d(TAG, "onResume: viewModel: " + noteViewModel);
 
         noteViewModel.getAllNotes().observe(getViewLifecycleOwner(), notes -> {

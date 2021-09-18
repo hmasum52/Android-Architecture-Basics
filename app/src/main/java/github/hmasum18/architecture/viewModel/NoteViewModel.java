@@ -1,16 +1,12 @@
 package github.hmasum18.architecture.viewModel;
 
-import android.app.Application;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import github.hmasum18.architecture.service.repository.NoteRepo;
 import github.hmasum18.architecture.service.model.Note;
-import github.hmasum18.architecture.view.IFragment;
 
 import java.util.List;
 
@@ -24,15 +20,11 @@ public class NoteViewModel extends ViewModel{
     @Inject
     NoteRepo noteRepo;
 
-    private IFragment currentFragment;
 
     @Inject
     public NoteViewModel() {
     }
 
-    public void setCurrentFragment(IFragment currentFragment) {
-        this.currentFragment = currentFragment;
-    }
 
     //note properties
     public void insert(Note note) {

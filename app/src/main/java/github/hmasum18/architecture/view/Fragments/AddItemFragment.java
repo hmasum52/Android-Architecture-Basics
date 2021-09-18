@@ -1,15 +1,12 @@
 package github.hmasum18.architecture.view.Fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.transition.Explode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,9 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import javax.inject.Inject;
@@ -28,12 +22,10 @@ import github.hmasum18.architecture.R;
 import github.hmasum18.architecture.dagger.component.AppComponent;
 import github.hmasum18.architecture.databinding.FragmentAddItemBinding;
 import github.hmasum18.architecture.view.App;
-import github.hmasum18.architecture.view.IFragment;
-import github.hmasum18.architecture.view.MainActivity;
 import github.hmasum18.architecture.viewModel.NoteViewModel;
 import github.hmasum18.architecture.service.model.Note;
 
-public class AddItemFragment extends Fragment implements IFragment {
+public class AddItemFragment extends Fragment {
     public static final String TAG = "AddItemFragment->";
     private FragmentAddItemBinding mVB;
     @Inject
@@ -84,7 +76,6 @@ public class AddItemFragment extends Fragment implements IFragment {
 
         AppComponent appComponent= ( (App) getActivity().getApplication() ).getAppComponent();
         appComponent.inject(this);
-        noteViewModel.setCurrentFragment(this);
         Log.d(TAG, "onCreateView: viewModel: "+noteViewModel);
 
         // Inflate the layout for this fragment
